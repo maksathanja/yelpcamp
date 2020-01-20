@@ -23,6 +23,7 @@ mongoose.connect(database, {
 const campgroundSchema = new mongoose.Schema({
   name: String,
   image: String,
+  description: String,
 });
 
 const Campground = mongoose.model('Campground', campgroundSchema);
@@ -32,26 +33,28 @@ app.get('/', (req, res) => {
   res.render('landing');
 });
 
-// Campgrounds route
+// *** RESTful Routes ***
+// * INDEX - Campgrounds
 app.get('/campgrounds', (req, res) => {
   // Get all campgrounds from DB
   Campground.find({}, (err, campgrounds) => {
     if (err) {
-      console.log('Something happened:');
       console.log(err);
     } else {
-      res.render('campgrounds', { campgrounds });
-      // ? Also can be done like the following
+      res.render('index', { campgrounds });
+      // * Also can be done like the following
       // * Campground.find({}, (err, allCampgrounds) => { ...
-      // * res.render('campgrounds', campgrounds: allCampgrounds);
+      // * res.render('index', campgrounds: allCampgrounds);
     }
   });
 });
 
+// * CREATE - add new campground to DB
 app.post('/campgrounds', (req, res) => {
   const { name } = req.body;
   const { image } = req.body;
-  const newCampground = { name, image };
+  const { description } = req.body;
+  const newCampground = { name, image, description };
   // Create a new campground and save to DB
   Campground.create(newCampground, (err, newlyCreated) => {
     if (err) {
@@ -63,8 +66,25 @@ app.post('/campgrounds', (req, res) => {
   });
 });
 
+// * NEW - show form to create new campground
 app.get('/campgrounds/new', (req, res) => {
   res.render('new');
+});
+
+// * SHOW - shows more info about one campground
+app.get('/campgrounds/:id', (req, res) => {
+  // find the campground with the provided ID
+  Campground.findById(req.params.id, (err, foundCampground) => {
+    if (err) {
+      console.log(err);
+    } else {
+      // render show template with that campground
+      res.render('show', { campground: foundCampground });
+      console.log('Here you go:');
+      console.log(foundCampground);
+    }
+  });
+  // render show template with that campground
 });
 
 app.listen(port, () => {
