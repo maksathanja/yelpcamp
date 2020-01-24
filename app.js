@@ -68,16 +68,17 @@ app.get('/campgrounds/new', (req, res) => {
 // * SHOW - shows more info about one campground
 app.get('/campgrounds/:id', (req, res) => {
   // find the campground with the provided ID
-  Campground.findById(req.params.id, (err, foundCampground) => {
-    if (err) {
-      console.log(err);
-    } else {
-      // render show template with that campground
-      res.render('show', { campground: foundCampground });
-      console.log('Here you go:');
-      console.log(foundCampground);
-    }
-  });
+  Campground.findById(req.params.id)
+    .populate('comments')
+    .exec((err, foundCampground) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // render show template with that foundCampground
+        res.render('show', { campground: foundCampground });
+        console.log(foundCampground);
+      }
+    });
   // render show template with that campground
 });
 
