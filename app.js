@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const Campground = require('./models/campground');
 require('dotenv').config();
 
 const app = express();
@@ -8,25 +9,15 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = process.env.PORT;
-const username = process.env.USERNAME;
-const password = process.env.PASSWORD;
-const database = `mongodb+srv://${username}:${password}@clusterone-36qke.mongodb.net/yelp_camp?retryWrites=true&w=majority`;
+const database = process.env.DATABASE;
 
 // Connect to database with mongoose
 mongoose.connect(database, {
   useCreateIndex: true,
+  useFindAndModify: false,
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-
-// Campground Schema Setup
-const campgroundSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String,
-});
-
-const Campground = mongoose.model('Campground', campgroundSchema);
 
 // Root route
 app.get('/', (req, res) => {
