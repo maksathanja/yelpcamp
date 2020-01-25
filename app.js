@@ -79,7 +79,6 @@ app.get('/campgrounds/:id', (req, res) => {
         console.log(foundCampground);
       }
     });
-  // render show template with that campground
 });
 
 app.listen(port, () => {

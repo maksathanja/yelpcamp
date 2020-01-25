@@ -32,14 +32,22 @@ const seedDB = () => {
     if (err) {
       console.log(err);
     } else {
-      console.log('Removed all campgrounds!');
+      console.log('Removed all campgrounds.');
+      // Delete all comments
+      Comment.deleteMany({}, err => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('Removed all comments.');
+        }
+      });
       // Add new campgrounds
       seeds.forEach(seed => {
         Campground.create(seed, (err, campground) => {
           if (err) {
             console.log(err);
           } else {
-            console.log('Added a campground from seed');
+            console.log('Added a campground from seed.');
             // Create a comment
             Comment.create(
               {
