@@ -1,4 +1,4 @@
-<%- include('partials/header.ejs') %>
+<%- include('../partials/header') %>
 
 <h1><%= campground.name %></h1>
 <img src="<%= campground.image %> " alt="Campground image." />
@@ -7,4 +7,4 @@
 <p><strong><%= comment.author %></strong> - <%= comment.text %></p>
 <% }); %>
 <!-- prettier-ignore -->
-<%- include('partials/footer.ejs') %>
+<%- include('../partials/footer') %>
