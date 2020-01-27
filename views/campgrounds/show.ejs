@@ -1,10 +1,15 @@
-<%- include('partials/header.ejs') %>
+<%- include('../partials/header') %>
 
 <h1><%= campground.name %></h1>
 <img src="<%= campground.image %> " alt="Campground image." />
 <p><%= campground.description %></p>
+<p>
+  <a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new "
+    >Add new comment</a
+  >
+</p>
 <% campground.comments.forEach(comment => { %>
 <p><strong><%= comment.author %></strong> - <%= comment.text %></p>
 <% }); %>
 <!-- prettier-ignore -->
-<%- include('partials/footer.ejs') %>
+<%- include('../partials/footer') %>
