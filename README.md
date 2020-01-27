@@ -2,13 +2,13 @@
 
 ## A Node.js web application project with RESTful Routing from [The Web Developer Bootcamp](https://www.udemy.com/course/the-web-developer-bootcamp/) - Udemy course by Colt Steele
 
-### Built with:
+### Built with
 
-#### Front-end:
+#### Front-end
 
 - [Bootstrap](https://getbootstrap.com/)
 
-#### Back-end:
+#### Back-end
 
 - [Node.js](https://nodejs.org/)
 - [MongoDB](https://www.mongodb.com/)
@@ -18,7 +18,7 @@
 - [body-parser](https://www.npmjs.com/package/body-parser/)
 - [method-override](https://www.npmjs.com/package/method-override/)
 
-### Deployment:
+### Deployment
 
 - [Heroku](https://www.heroku.com/)
 
