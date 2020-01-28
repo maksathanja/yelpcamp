@@ -14,9 +14,10 @@
 - [MongoDB](https://www.mongodb.com/)
 - [Express](https://expressjs.com/)
 - [EJS](https://ejs.co/)
-- [dotenv](https://www.npmjs.com/package/dotenv/)
-- [body-parser](https://www.npmjs.com/package/body-parser/)
-- [method-override](https://www.npmjs.com/package/method-override/)
+- [Mongoose](https://mongoosejs.com/)
+- [dotenv](https://www.npmjs.com/package/dotenv)
+- [body-parser](https://www.npmjs.com/package/body-parser)
+- [method-override](https://www.npmjs.com/package/method-override)
 
 ### Deployment
 
@@ -24,6 +25,6 @@
 
 ---
 
-### Licence:
+### Licence
 
 [MIT](LICENCE.md)
