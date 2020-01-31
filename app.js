@@ -9,15 +9,30 @@ const User = require('./models/user');
 const seedDB = require('./seeds');
 require('dotenv').config();
 
+const app = express();
+const database = process.env.DATABASE;
+const port = process.env.PORT;
+
 seedDB();
 
-const app = express();
 app.set('view engine', 'ejs');
 app.use(express.static(`${__dirname}/public`));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const port = process.env.PORT;
-const database = process.env.DATABASE;
+// PASSPORT CONFIGURATION
+app.use(
+  require('express-session')({
+    secret: 'There and Back Again! A Book by Bilgo Baggins.',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Connect to database with mongoose
 mongoose.connect(database, {
@@ -127,6 +142,33 @@ app.post('/campgrounds/:id/comments', (req, res) => {
         }
       });
     }
+  });
+});
+
+// =================
+// * AUTH Routes
+// =================
+
+// show register form
+app.get('/register', (req, res) => {
+  res.render('register');
+});
+
+// handle signup logic
+app.post('/register', (req, res) => {
+  const { username } = req.body;
+  const { password } = req.body;
+
+  User.register(new User({ username }), password, (err, user) => {
+    if (err) {
+      console.log(err);
+      res.render('/register');
+    } else {
+      passport.authenticate('local')(req, res, () => {
+        res.redirect('/campgrounds');
+      });
+    }
+    console.log('New user:', user);
   });
 });
 
