@@ -162,7 +162,7 @@ app.post('/register', (req, res) => {
   User.register(new User({ username }), password, (err, user) => {
     if (err) {
       console.log(err);
-      res.render('/register');
+      res.render('register');
     } else {
       passport.authenticate('local')(req, res, () => {
         res.redirect('/campgrounds');
@@ -171,6 +171,22 @@ app.post('/register', (req, res) => {
     console.log('New user:', user);
   });
 });
+
+// show login form
+
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+// handle login logic
+app.post(
+  '/login',
+  passport.authenticate('local', {
+    successRedirect: '/campgrounds',
+    failureRedirec: '/login',
+  }),
+  (req, res) => {}
+);
 
 app.listen(port, () => {
   console.log(`The YelpCamp server has started on port ${port}`);
