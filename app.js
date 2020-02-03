@@ -38,6 +38,12 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// add currentUser to every single route
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
+
 // Connect to database with mongoose
 mongoose.connect(database, {
   useCreateIndex: true,
@@ -65,11 +71,10 @@ app.get('/', (req, res) => {
 // * INDEX - Campgrounds
 app.get('/campgrounds', (req, res) => {
   // Get all campgrounds from DB
-  Campground.find({}, (err, campgrounds) => {
-    return err ? console.log(err) : res.render('campgrounds/index', { campgrounds });
-    // * Also can be done like the following
-    // * Campground.find({}, (err, allCampgrounds) => { ...
-    // * res.render('index', campgrounds: allCampgrounds);
+  Campground.find({}, (err, allCampgrounds) => {
+    return err
+      ? console.log(err)
+      : res.render('campgrounds/index', { campgrounds: allCampgrounds });
   });
 });
 
