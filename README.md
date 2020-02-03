@@ -15,9 +15,13 @@
 - [Express](https://expressjs.com/)
 - [EJS](https://ejs.co/)
 - [Mongoose](https://mongoosejs.com/)
+- [Passport.js](http://www.passportjs.org)
 - [dotenv](https://www.npmjs.com/package/dotenv)
 - [body-parser](https://www.npmjs.com/package/body-parser)
 - [method-override](https://www.npmjs.com/package/method-override)
+- [express-session](https://www.npmjs.com/package/express-session)
+- [passport-local](https://www.npmjs.com/package/passport-local)
+- [passport-local-mongoose](https://www.npmjs.com/package/passport-local-mongoose)
 
 ### Deployment
 
