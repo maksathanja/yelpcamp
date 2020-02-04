@@ -25,7 +25,14 @@
             <em>Submitted by Anonymous</em>
             <% } %>
           </p>
-          <a href="/campgrounds/<%= campground._id %>/edit" class="btn btn-warning">Edit</a>
+          <a href="/campgrounds/<%= campground._id %>/edit" class="btn btn-xs btn-warning">Edit</a>
+          <form
+            id="delete-form"
+            action="/campgrounds/<%= campground._id %>?_method=DELETE"
+            method="POST"
+          >
+            <button class="btn btn-xs btn-danger" type="submit">Delete</button>
+          </form>
         </div>
       </div>
       <div class="well">

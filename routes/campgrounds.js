@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const express = require('express');
 const Campground = require('../models/campground');
+const Comment = require('../models/comment');
 
 const router = express.Router();
 
@@ -76,6 +77,29 @@ router.put('/:id', (req, res) => {
       ? res.redirect('/campgrounds')
       : // redirect to show page
         res.redirect(`/campgrounds/${updatedCampground.id}`);
+  });
+});
+
+// * Delete campground and its comments:
+// ? https://www.udemy.com/the-web-developer-bootcamp/learn/v4/questions/6168552
+// ? https://www.youtube.com/watch?v=5iz69Wq_77k
+
+// DESTROY Campground (with its comments) Route
+router.delete('/:id', (req, res) => {
+  Campground.findById(req.params.id, (err, campground) => {
+    // * to use code below, first uncomment pre-hook in campground model
+    // return err ? next(err) : (campground.remove(), res.redirect('/campgrounds'));
+    // * to use code above, first comment the code below
+    Comment.deleteMany(
+      {
+        _id: {
+          $in: campground.comments,
+        },
+      },
+      err => {
+        return err ? console.log(err) : (campground.remove(), res.redirect('/campgrounds'));
+      }
+    );
   });
 });
 

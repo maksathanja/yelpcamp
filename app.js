@@ -18,7 +18,7 @@ const app = express();
 const database = process.env.DATABASE;
 const port = process.env.PORT;
 
-// seedDB();
+seedDB();
 
 app.set('view engine', 'ejs');
 app.use(express.static(`${__dirname}/public`));
