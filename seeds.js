@@ -1,6 +1,7 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const Campground = require('./models/campground');
 const Comment = require('./models/comment');
 
