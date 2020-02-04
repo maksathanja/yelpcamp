@@ -25,7 +25,7 @@ router.post('/register', (req, res) => {
       : (passport.authenticate('local')(req, res, () => {
           res.redirect('/campgrounds');
         }),
-        console.log('New user:', user));
+        console.log('New user in town:', user.username));
   });
 });
 

@@ -1,3 +1,6 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-return-assign */
 /* eslint-disable no-shadow */
 const express = require('express');
 const Campground = require('../models/campground');
@@ -34,10 +37,14 @@ router.post('/', isLoggedIn, (req, res) => {
       : Comment.create(comment, (err, newComment) => {
           return err
             ? console.log(err)
-            : (campground.comments.push(newComment),
+            : // add username and id to comment
+              ((newComment.author.id = req.user._id),
+              (newComment.author.username = req.user.username),
+              // save comment
+              newComment.save(),
+              campground.comments.push(newComment),
               campground.save(),
-              res.redirect(`/campgrounds/${id}`),
-              console.log('New comment added', newComment));
+              res.redirect(`/campgrounds/${id}`));
         });
   });
 });
