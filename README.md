@@ -1,6 +1,6 @@
 # YelpCamp ![Release](https://img.shields.io/github/v/release/maxathanja/yelpcamp)
 
-## A Node.js web application project with RESTful Routing from [The Web Developer Bootcamp](https://www.udemy.com/course/the-web-developer-bootcamp/) - Udemy course by Colt Steele
+## A Node.js web application project with RESTful Routing
 
 ### Built with
 
@@ -26,6 +26,10 @@
 ### Deployment
 
 - [Heroku](https://www.heroku.com/)
+
+---
+
+### Project from [The Web Developer Bootcamp](https://www.udemy.com/course/the-web-developer-bootcamp/) - Udemy course by Colt Steele
 
 ---
 
