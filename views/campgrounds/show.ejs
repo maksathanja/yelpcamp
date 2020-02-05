@@ -19,11 +19,7 @@
           <h4><a href="#"><%= campground.name %></a></h4>
           <p><%= campground.description %></p>
           <p>
-            <% if (campground.author.username) { %>
             <em>Submitted by <%= campground.author.username %></em>
-            <% } else { %>
-            <em>Submitted by Anonymous</em>
-            <% } %>
           </p>
           <% if (currentUser && campground.author.id.equals(currentUser._id)) { %>
           <a href="/campgrounds/<%= campground._id %>/edit" class="btn btn-xs btn-warning">Edit</a>
@@ -50,6 +46,11 @@
             <strong><%= comment.author.username %></strong>
             <span class="pull-right">10 days ago</span>
             <p><%= comment.text %></p>
+            <a
+              class="btn btn-xs btn-warning"
+              href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit"
+              >Edit</a
+            >
           </div>
         </div>
         <% }); %>

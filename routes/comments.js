@@ -18,7 +18,7 @@ const isLoggedIn = (req, res, next) => {
   }
 };
 
-// Comments NEW Route
+// NEW Comments Route
 router.get('/new', isLoggedIn, (req, res) => {
   // find campground by id
   Campground.findById(req.params.id, (err, campground) => {
@@ -26,7 +26,7 @@ router.get('/new', isLoggedIn, (req, res) => {
   });
 });
 
-// Comments SHOW Route
+// CREATE Comments Route
 router.post('/', isLoggedIn, (req, res) => {
   const { id } = req.params;
   const { comment } = req.body;
@@ -46,6 +46,26 @@ router.post('/', isLoggedIn, (req, res) => {
               campground.save(),
               res.redirect(`/campgrounds/${id}`));
         });
+  });
+});
+
+// EDIT Comments Route
+router.get('/:comment_id/edit', (req, res) => {
+  const campgroundId = req.params.id;
+  Comment.findById(req.params.comment_id, (err, foundComment) => {
+    return err
+      ? res.redirect('back')
+      : res.render('comments/edit', { campground_id: campgroundId, comment: foundComment });
+  });
+});
+
+// UPDATE Comments Route
+router.put('/:comment_id', (req, res) => {
+  const campgroundId = req.params.id;
+  const commentId = req.params.comment_id;
+  const inputComment = req.body.comment;
+  Comment.findByIdAndUpdate(commentId, inputComment, (err, updatedComment) => {
+    return err ? res.redirect('back') : res.redirect(`/campgrounds/${campgroundId}`);
   });
 });
 
