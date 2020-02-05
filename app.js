@@ -6,7 +6,7 @@ const session = require('express-session');
 const LocalStrategy = require('passport-local');
 const methodOverride = require('method-override');
 const User = require('./models/user');
-const seedDB = require('./seeds');
+// const seedDB = require('./seeds');
 
 // requiring routes
 const commentRoutes = require('./routes/comments');
@@ -18,7 +18,7 @@ const app = express();
 const database = process.env.DATABASE;
 const port = process.env.PORT;
 
-seedDB();
+// seedDB();
 
 app.set('view engine', 'ejs');
 app.use(express.static(`${__dirname}/public`));

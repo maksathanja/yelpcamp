@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 /* eslint-disable no-underscore-dangle */
 const express = require('express');
 const Campground = require('../models/campground');
@@ -5,13 +6,32 @@ const Comment = require('../models/comment');
 
 const router = express.Router();
 
-// middleware
+// middlewares
 const isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     next();
   } else {
     req.session.returnTo = req.originalUrl;
     res.redirect('/login');
+  }
+};
+
+const checkCampgroundOwnership = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    Campground.findById(req.params.id, (err, foundCampground) => {
+      if (err) {
+        res.redirect('back');
+      } else {
+        // does user own the campground?
+        if (foundCampground.author.id.equals(req.user._id)) {
+          next();
+        } else {
+          res.redirect('back');
+        }
+      }
+    });
+  } else {
+    res.redirect('back');
   }
 };
 
@@ -59,16 +79,16 @@ router.get('/:id', (req, res) => {
 });
 
 // EDIT Campground Route
-router.get('/:id/edit', (req, res) => {
+router.get('/:id/edit', checkCampgroundOwnership, (req, res) => {
   Campground.findById(req.params.id, (err, foundCampground) => {
     return err
-      ? res.redirect('/campgrounds')
+      ? res.redirect('back')
       : res.render('campgrounds/edit', { campground: foundCampground });
   });
 });
 
 // UPDATE Campground Route
-router.put('/:id', (req, res) => {
+router.put('/:id', checkCampgroundOwnership, (req, res) => {
   const { id } = req.params;
   const { campground } = req.body;
   // find and update the correct campground
@@ -85,7 +105,7 @@ router.put('/:id', (req, res) => {
 // ? https://www.youtube.com/watch?v=5iz69Wq_77k
 
 // DESTROY Campground (with its comments) Route
-router.delete('/:id', (req, res) => {
+router.delete('/:id', checkCampgroundOwnership, (req, res) => {
   Campground.findById(req.params.id, (err, campground) => {
     // * to use code below, first uncomment pre-hook in campground model
     // return err ? next(err) : (campground.remove(), res.redirect('/campgrounds'));
