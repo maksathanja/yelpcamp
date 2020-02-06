@@ -64,8 +64,16 @@ router.put('/:comment_id', (req, res) => {
   const campgroundId = req.params.id;
   const commentId = req.params.comment_id;
   const inputComment = req.body.comment;
-  Comment.findByIdAndUpdate(commentId, inputComment, (err, updatedComment) => {
+  Comment.findByIdAndUpdate(commentId, inputComment, err => {
     return err ? res.redirect('back') : res.redirect(`/campgrounds/${campgroundId}`);
+  });
+});
+
+// DESTROY Comments Route
+router.delete('/:comment_id', (req, res) => {
+  // findByIdAndRemove
+  Comment.findByIdAndRemove(req.params.comment_id, err => {
+    return err ? res.redirect('back') : res.redirect(`/campgrounds/${req.params.id}`);
   });
 });
 

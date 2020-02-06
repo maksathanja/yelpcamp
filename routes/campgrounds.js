@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-lonely-if */
 /* eslint-disable no-underscore-dangle */
 const express = require('express');
