@@ -11,12 +11,18 @@ const seeds = [
     image: 'https://cdn.pixabay.com/photo/2016/11/08/05/03/adventure-1807495_960_720.jpg',
     description:
       'Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic. Gumbo beet greens corn soko endive gumbo gourd. Parsley shallot courgette tatsoi pea sprouts fava bean collard greens dandelion okra wakame tomato. Dandelion cucumber earthnut pea peanut soko zucchini.',
+    author: {
+      username: 'Camper',
+    },
   },
   {
     name: 'Rocky Mountain',
     image: 'https://cdn.pixabay.com/photo/2016/02/18/22/16/tent-1208201_960_720.jpg',
     description:
       'Turnip greens yarrow ricebean rutabaga endive cauliflower sea lettuce kohlrabi amaranth water spinach avocado daikon napa cabbage asparagus winter purslane kale. Celery potato scallion desert raisin horseradish spinach carrot soko. Lotus root water spinach fennel kombu maize bamboo shoot green bean swiss chard seakale pumpkin onion chickpea gram corn pea. Brussels sprout coriander water chestnut gourd swiss chard wakame kohlrabi beetroot carrot watercress. Corn amaranth salsify bunya nuts nori azuki bean chickweed potato bell pepper artichoke.',
+    author: {
+      username: 'Camper',
+    },
   },
   {
     name: 'Laky Hollow',
@@ -24,6 +30,9 @@ const seeds = [
       'https://cdn.pixabay.com/photo/2018/12/20/13/58/tent-at-woolly-hollow-3886077_960_720.jpg',
     description:
       'Soko radicchio bunya nuts gram dulse silver beet parsnip napa cabbage lotus root sea lettuce brussels sprout cabbage. Catsear cauliflower garbanzo yarrow salsify chicory garlic bell pepper napa cabbage lettuce tomato kale arugula melon sierra leone bologi rutabaga tigernut. Sea lettuce gumbo grape kale kombu cauliflower salsify kohlrabi okra sea lettuce broccoli celery lotus root carrot winter purslane turnip greens garlic. Jícama garlic courgette coriander radicchio plantain scallion cauliflower fava bean desert raisin spring onion chicory bunya nuts. Sea lettuce water spinach gram fava bean leek dandelion silver beet eggplant bush tomato.',
+    author: {
+      username: 'Camper',
+    },
   },
 ];
 
@@ -53,7 +62,7 @@ const seedDB = () => {
             Comment.create(
               {
                 text: 'This place is great, but I wish there was internet',
-                author: 'Homer',
+                author: { username: 'Homer' },
               },
               (err, comment) => {
                 if (err) {
