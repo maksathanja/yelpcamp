@@ -5,29 +5,20 @@
 const express = require('express');
 const Campground = require('../models/campground');
 const Comment = require('../models/comment');
+const middleware = require('../middleware');
 // { mergeParams: true } will access id of the comments
 const router = express.Router({ mergeParams: true });
 
-// middleware
-const isLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    next();
-  } else {
-    req.session.returnTo = req.originalUrl;
-    res.redirect('/login');
-  }
-};
-
-// Comments NEW Route
-router.get('/new', isLoggedIn, (req, res) => {
+// NEW Comments Route
+router.get('/new', middleware.isLoggedIn, (req, res) => {
   // find campground by id
   Campground.findById(req.params.id, (err, campground) => {
     return err ? console.log(err) : res.render('comments/new', { campground });
   });
 });
 
-// Comments SHOW Route
-router.post('/', isLoggedIn, (req, res) => {
+// CREATE Comments Route
+router.post('/', middleware.isLoggedIn, (req, res) => {
   const { id } = req.params;
   const { comment } = req.body;
   // lookup campground using ID
@@ -46,6 +37,34 @@ router.post('/', isLoggedIn, (req, res) => {
               campground.save(),
               res.redirect(`/campgrounds/${id}`));
         });
+  });
+});
+
+// EDIT Comments Route
+router.get('/:comment_id/edit', middleware.checkCommentOwnership, (req, res) => {
+  const campgroundId = req.params.id;
+  Comment.findById(req.params.comment_id, (err, foundComment) => {
+    return err
+      ? res.redirect('back')
+      : res.render('comments/edit', { campground_id: campgroundId, comment: foundComment });
+  });
+});
+
+// UPDATE Comments Route
+router.put('/:comment_id', middleware.checkCommentOwnership, (req, res) => {
+  const campgroundId = req.params.id;
+  const commentId = req.params.comment_id;
+  const inputComment = req.body.comment;
+  Comment.findByIdAndUpdate(commentId, inputComment, err => {
+    return err ? res.redirect('back') : res.redirect(`/campgrounds/${campgroundId}`);
+  });
+});
+
+// DESTROY Comments Route
+router.delete('/:comment_id', middleware.checkCommentOwnership, (req, res) => {
+  // findByIdAndRemove
+  Comment.findByIdAndRemove(req.params.comment_id, err => {
+    return err ? res.redirect('back') : res.redirect(`/campgrounds/${req.params.id}`);
   });
 });
 
