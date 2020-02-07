@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-return-assign */
@@ -15,6 +16,25 @@ const isLoggedIn = (req, res, next) => {
   } else {
     req.session.returnTo = req.originalUrl;
     res.redirect('/login');
+  }
+};
+
+const checkCommentOwnership = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    Comment.findById(req.params.comment_id, (err, foundComment) => {
+      if (err) {
+        res.redirect('back');
+      } else {
+        // does user own the comment?
+        if (foundComment.author.id.equals(req.user._id)) {
+          next();
+        } else {
+          res.redirect('back');
+        }
+      }
+    });
+  } else {
+    res.redirect('back');
   }
 };
 
@@ -50,7 +70,7 @@ router.post('/', isLoggedIn, (req, res) => {
 });
 
 // EDIT Comments Route
-router.get('/:comment_id/edit', (req, res) => {
+router.get('/:comment_id/edit', checkCommentOwnership, (req, res) => {
   const campgroundId = req.params.id;
   Comment.findById(req.params.comment_id, (err, foundComment) => {
     return err
@@ -60,7 +80,7 @@ router.get('/:comment_id/edit', (req, res) => {
 });
 
 // UPDATE Comments Route
-router.put('/:comment_id', (req, res) => {
+router.put('/:comment_id', checkCommentOwnership, (req, res) => {
   const campgroundId = req.params.id;
   const commentId = req.params.comment_id;
   const inputComment = req.body.comment;
@@ -70,7 +90,7 @@ router.put('/:comment_id', (req, res) => {
 });
 
 // DESTROY Comments Route
-router.delete('/:comment_id', (req, res) => {
+router.delete('/:comment_id', checkCommentOwnership, (req, res) => {
   // findByIdAndRemove
   Comment.findByIdAndRemove(req.params.comment_id, err => {
     return err ? res.redirect('back') : res.redirect(`/campgrounds/${req.params.id}`);
