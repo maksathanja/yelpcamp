@@ -1,4 +1,3 @@
-/* eslint-disable no-lonely-if */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-return-assign */
@@ -6,40 +5,12 @@
 const express = require('express');
 const Campground = require('../models/campground');
 const Comment = require('../models/comment');
+const middleware = require('../middleware');
 // { mergeParams: true } will access id of the comments
 const router = express.Router({ mergeParams: true });
 
-// middleware
-const isLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    next();
-  } else {
-    req.session.returnTo = req.originalUrl;
-    res.redirect('/login');
-  }
-};
-
-const checkCommentOwnership = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    Comment.findById(req.params.comment_id, (err, foundComment) => {
-      if (err) {
-        res.redirect('back');
-      } else {
-        // does user own the comment?
-        if (foundComment.author.id.equals(req.user._id)) {
-          next();
-        } else {
-          res.redirect('back');
-        }
-      }
-    });
-  } else {
-    res.redirect('back');
-  }
-};
-
 // NEW Comments Route
-router.get('/new', isLoggedIn, (req, res) => {
+router.get('/new', middleware.isLoggedIn, (req, res) => {
   // find campground by id
   Campground.findById(req.params.id, (err, campground) => {
     return err ? console.log(err) : res.render('comments/new', { campground });
@@ -47,7 +18,7 @@ router.get('/new', isLoggedIn, (req, res) => {
 });
 
 // CREATE Comments Route
-router.post('/', isLoggedIn, (req, res) => {
+router.post('/', middleware.isLoggedIn, (req, res) => {
   const { id } = req.params;
   const { comment } = req.body;
   // lookup campground using ID
@@ -70,7 +41,7 @@ router.post('/', isLoggedIn, (req, res) => {
 });
 
 // EDIT Comments Route
-router.get('/:comment_id/edit', checkCommentOwnership, (req, res) => {
+router.get('/:comment_id/edit', middleware.checkCommentOwnership, (req, res) => {
   const campgroundId = req.params.id;
   Comment.findById(req.params.comment_id, (err, foundComment) => {
     return err
@@ -80,7 +51,7 @@ router.get('/:comment_id/edit', checkCommentOwnership, (req, res) => {
 });
 
 // UPDATE Comments Route
-router.put('/:comment_id', checkCommentOwnership, (req, res) => {
+router.put('/:comment_id', middleware.checkCommentOwnership, (req, res) => {
   const campgroundId = req.params.id;
   const commentId = req.params.comment_id;
   const inputComment = req.body.comment;
@@ -90,7 +61,7 @@ router.put('/:comment_id', checkCommentOwnership, (req, res) => {
 });
 
 // DESTROY Comments Route
-router.delete('/:comment_id', checkCommentOwnership, (req, res) => {
+router.delete('/:comment_id', middleware.checkCommentOwnership, (req, res) => {
   // findByIdAndRemove
   Comment.findByIdAndRemove(req.params.comment_id, err => {
     return err ? res.redirect('back') : res.redirect(`/campgrounds/${req.params.id}`);
