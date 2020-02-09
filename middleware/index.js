@@ -44,10 +44,15 @@ middlewareObj.checkCommentOwnership = (req, res, next) => {
   }
 };
 
+// See https://www.udemy.com/the-web-developer-bootcamp/learn/v4/questions/3112532
+// and https://www.udemy.com/the-web-developer-bootcamp/learn/v4/questions/1886146
+// redirect to the last page before login
 middlewareObj.isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     next();
   } else {
+    // flash message should be before redirect
+    req.flash('error', 'Please login first');
     req.session.returnTo = req.originalUrl;
     res.redirect('/login');
   }
