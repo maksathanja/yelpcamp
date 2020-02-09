@@ -52,7 +52,7 @@ middlewareObj.isLoggedIn = (req, res, next) => {
     next();
   } else {
     // flash message should be before redirect
-    req.flash('error', 'Please login first');
+    req.flash('error', 'Please login first.');
     req.session.returnTo = req.originalUrl;
     res.redirect('/login');
   }
