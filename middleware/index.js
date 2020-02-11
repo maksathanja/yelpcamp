@@ -16,11 +16,13 @@ middlewareObj.checkCampgroundOwnership = (req, res, next) => {
         if (foundCampground.author.id.equals(req.user._id)) {
           next();
         } else {
+          req.flash('error', `You don't have permission to do that.`);
           res.redirect('back');
         }
       }
     });
   } else {
+    req.flash('error', 'Please login to proceed.');
     res.redirect('back');
   }
 };
@@ -35,11 +37,13 @@ middlewareObj.checkCommentOwnership = (req, res, next) => {
         if (foundComment.author.id.equals(req.user._id)) {
           next();
         } else {
+          req.flash('error', `You don't have permission to do that.`);
           res.redirect('back');
         }
       }
     });
   } else {
+    req.flash('error', `You don't have permission to do that.`);
     res.redirect('back');
   }
 };
@@ -52,7 +56,7 @@ middlewareObj.isLoggedIn = (req, res, next) => {
     next();
   } else {
     // flash message should be before redirect
-    req.flash('error', 'Please login first.');
+    req.flash('error', 'Please login to proceed.');
     req.session.returnTo = req.originalUrl;
     res.redirect('/login');
   }

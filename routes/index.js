@@ -21,8 +21,9 @@ router.post('/register', (req, res) => {
 
   User.register(new User({ username }), password, (err, user) => {
     return err
-      ? res.render('register')
+      ? (req.flash('error', `${err.message}.`), res.redirect('register'))
       : (passport.authenticate('local')(req, res, () => {
+          req.flash('success', `Welcome to YelpCamp, ${user.username}!`);
           res.redirect('/campgrounds');
         }),
         console.log('New user in town:', user.username));
@@ -54,7 +55,7 @@ router.post(
 // logout route
 router.get('/logout', (req, res) => {
   req.logout();
-  req.flash('success', 'Logged you out.');
+  req.flash('success', 'Logged out.');
   res.redirect('/campgrounds');
 });
 
