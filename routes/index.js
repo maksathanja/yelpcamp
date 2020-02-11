@@ -4,6 +4,9 @@ const User = require('../models/user');
 
 const router = express.Router();
 
+// ! Error handling with nonexistent ids
+// ! https://youtu.be/eDWPJAzlBfM
+
 // Root route
 router.get('/', (req, res) => {
   res.render('landing');
@@ -47,7 +50,9 @@ router.post(
     // and https://www.udemy.com/the-web-developer-bootcamp/learn/v4/questions/1886146
     // redirect to the last page before login
     const returnTo = req.session.returnTo ? req.session.returnTo : '/campgrounds';
+    const userLoggedIn = req.session.passport.user;
     delete req.session.returnTo;
+    req.flash('success', `Welcome back, ${userLoggedIn}.`);
     res.redirect(returnTo);
   }
 );
