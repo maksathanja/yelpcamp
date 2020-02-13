@@ -4,6 +4,9 @@ const User = require('../models/user');
 
 const router = express.Router();
 
+// ! Error handling with nonexistent ids
+// ! https://youtu.be/eDWPJAzlBfM
+
 // Root route
 router.get('/', (req, res) => {
   res.render('landing');
@@ -21,8 +24,9 @@ router.post('/register', (req, res) => {
 
   User.register(new User({ username }), password, (err, user) => {
     return err
-      ? res.render('register')
+      ? (req.flash('error', `${err.message}.`), res.redirect('register'))
       : (passport.authenticate('local')(req, res, () => {
+          req.flash('success', `Welcome to YelpCamp, ${user.username}!`);
           res.redirect('/campgrounds');
         }),
         console.log('New user in town:', user.username));
@@ -46,7 +50,9 @@ router.post(
     // and https://www.udemy.com/the-web-developer-bootcamp/learn/v4/questions/1886146
     // redirect to the last page before login
     const returnTo = req.session.returnTo ? req.session.returnTo : '/campgrounds';
+    const userLoggedIn = req.session.passport.user;
     delete req.session.returnTo;
+    req.flash('success', `Welcome back, ${userLoggedIn}.`);
     res.redirect(returnTo);
   }
 );
@@ -54,6 +60,7 @@ router.post(
 // logout route
 router.get('/logout', (req, res) => {
   req.logout();
+  req.flash('success', 'Logged out.');
   res.redirect('/campgrounds');
 });
 
