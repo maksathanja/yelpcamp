@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
   Campground.find({}, (err, allCampgrounds) => {
     return err
       ? console.log(err)
-      : res.render('campgrounds/index', { campgrounds: allCampgrounds });
+      : res.render('campgrounds/index', { campgrounds: allCampgrounds, page: 'campgrounds' });
   });
 });
 

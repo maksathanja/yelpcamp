@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 
 // show register form
 router.get('/register', (req, res) => {
-  res.render('register');
+  res.render('register', { page: 'register' });
 });
 
 // handle signup logic
@@ -24,7 +24,8 @@ router.post('/register', (req, res) => {
 
   User.register(new User({ username }), password, (err, user) => {
     return err
-      ? (req.flash('error', `${err.message}.`), res.redirect('register'))
+      ? // (req.flash('error', `${err.message}.`), res.redirect('register'))
+        res.render('register', { error: err.message })
       : (passport.authenticate('local')(req, res, () => {
           req.flash('success', `Welcome to YelpCamp, ${user.username}!`);
           res.redirect('/campgrounds');
@@ -35,7 +36,7 @@ router.post('/register', (req, res) => {
 
 // show login form
 router.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', { page: 'login' });
 });
 
 // handle login logic
